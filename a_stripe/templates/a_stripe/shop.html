@@ -1,0 +1,27 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %} 
+
+<div class="max-w-6xl mx-auto p-12">
+    <h1>Shop</h1>
+    <div class="mx-auto py-2">
+        <div class="flex items-center flex-wrap">
+
+            {% for product in products %}
+                <product-item class="block w-full md:w-1/3 xl:w-1/4 md:p-2">
+                    <a href="{% url 'product' product.id %}" class="block aspect-square bg-gray-100 rounded-xl">
+                        <img class="rounded-xl hover:shadow-lg" src="{{ product.image }}">
+                    </a>
+                    <div class="pt-3">
+                        {{ product.name }}             
+                    </div>
+                    <p class="pt-1 text-gray-400">
+                        {{ product.price|floatformat:2 }}
+                    </p>
+                </product-item> 
+            {% endfor %}
+        </div>
+    </div>
+</div>
+
+{% endblock %}
