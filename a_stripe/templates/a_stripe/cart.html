@@ -1,0 +1,46 @@
+{% extends 'layouts/blank.html' %} {% block content %}
+
+<div class="max-w-6xl mx-auto p-12">
+  <h1>My Cart</h1>
+  <div class="md:grid grid-cols-3 gap-8">
+    <div class="col-span-2">
+      <ul class="flex flex-col divide-y">
+        
+        {% for product in cart %}
+            <li class="flex items-center py-4">
+            <a href="" class="block aspect-square bg-gray-100 w-36">
+                <img src="{{product.image}}" />
+            </a>
+            <div class="flex justify-between w-full pl-6">
+                <div>
+                <span>{{product.name}}</span>
+                <div class="flex items-center gap-4 mt-2">
+                    <form
+                        hx-post="{% url 'update_checkout' product.id %}"
+                        hx-target="#checkout_total"
+                        hx-swap="outerHTML"
+                        hx-trigger="change"
+                    >
+                    {% csrf_token %}
+                    <select name="quantity" class="py-2 pr-2 cursor-pointer">
+                        {% for i in quantity_range %}
+                            <option value="{{i}}" {% if i == product.quantity %} selected {% endif %}>
+                                {{i}}
+                            </option>
+                        {% endfor %}    
+                    </select>
+                    </form>
+                    <a href="{% url 'remove_from_cart' product.id %}" class="text-red-500 cursor-pointer"> Remove </a>
+                </div>
+                </div>
+                <div id="product-total-{{product.id}}">${{ product.total_price|floatformat:2 }}</div>
+            </div>
+            </li>
+        {% endfor %}
+      </ul>
+    </div>
+        {% include 'a_stripe/partials/checkout-total.html' %}
+  </div>
+</div>
+
+{% endblock %}

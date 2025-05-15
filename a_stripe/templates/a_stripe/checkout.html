@@ -1,0 +1,118 @@
+{% extends 'layouts/blank.html' %} {% block content %}
+
+<div class="max-w-6xl mx-auto px-8 py-24">
+  <h1>Checkout</h1>
+  <div class="grid grid-cols-3 gap-12">
+    <div class="col-span-2">
+      <form method="post">
+        {% csrf_token %}
+        <div class="mb-12">
+          <div class="flex flex-col gap-4">
+            <input
+              type="email"
+              name="email"
+              class="w-full"
+              placeholder="Email"
+              value="{{ form.email.value }}"
+            />
+            <input
+              type="phone"
+              name="phone"
+              class="w-full"
+              placeholder="Phone (optional)"
+              value="{{ form.phone.value|default:'' }}"
+            />
+          </div>
+        </div>
+        <div>
+          <h2>Delivery Address</h2>
+          <div class="flex gap-6">
+            <div class="w-1/2 mb-4">
+              <input
+                type="text"
+                name="first_name"
+                class="w-full"
+                placeholder="First Name"
+                value="{{ form.first_name.value|default:'' }}"
+              />
+            </div>
+            <div class="w-1/2 mb-4">
+              <input
+                type="text"
+                name="last_name"
+                class="w-full"
+                placeholder="Last Name"
+                value="{{ form.last_name.value|default:'' }}"
+              />
+            </div>
+          </div>
+
+          <div class="mb-4 flex flex-col gap-4">
+            <input
+              type="text"
+              name="address_line_one"
+              class="w-full"
+              placeholder="Street Address"
+              value="{{ form.address_line_one.value|default:'' }}"
+            />
+            <input
+              type="text"
+              name="apartment"
+              class="w-full"
+              placeholder="Floor / Appartement / Other (optional)"
+              value="{{ form.apartment.value|default:'' }}"
+            />
+          </div>
+
+          <div class="flex gap-6">
+            <div class="w-1/2 mb-4">
+              <input
+                type="text"
+                name="city"
+                class="w-full"
+                placeholder="City"
+                value="{{ form.city.value|default:'' }}"
+              />
+            </div>
+            <div class="w-1/2 mb-4">
+              <input
+                type="text"
+                name="zip_code"
+                class="w-full"
+                placeholder="Zip Code"
+                value="{{ form.zip_code.value|default:'' }}"
+              />
+            </div>
+          </div>
+        </div>
+        <button type="submit">Confirm</button>
+      </form>
+    </div>
+    <div>
+      <div id="checkout_module" class="border rounded-lg shadow-md p-4 mb-6">
+        <div class="flex items-center justify-between mb-4">
+          <span class="text-2xl">Sub total</span>
+          <div>${{ cart.get_total_cost|floatformat:2 }}</div>
+        </div>
+        <div class="flex items-center justify-between mb-4">
+          <span>Items:</span>
+          <span>{{ cart.get_total_quantity }}</span>
+        </div>
+        <a
+          href="{% url 'cart' %}"
+          class="button button-gray !text-gray-600 !font-normal !py-2 !px-4 !shadow-none"
+          >Back to Cart</a
+        >
+      </div>
+
+      <!-- Product-specific pricing (hidden for HTMX updates) -->
+      <div class="hidden">
+        <div hx-swap-oob="true" id="product-total-{{product.id}}">
+          ${{ product.total_price|floatformat:2 }}
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

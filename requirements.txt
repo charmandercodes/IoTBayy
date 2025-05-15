@@ -1,0 +1,9 @@
+Django
+pillow
+django-cleanup
+django-allauth[socialaccount]
+django-htmx
+stripe
+django-environ
+django-admin-honeypot-updated-2021
+python-dotenv

@@ -1,0 +1,38 @@
+{% extends 'layouts/blank.html' %} {% block content %}
+
+<div class="max-w-4xl mx-auto px-8 py-24">
+  <div class="grid grid-cols-3 gap-6">
+    <div class="col-span-2 rounded-xl">
+      <img class="rounded-xl w-full h-auto" src="{{ product.image }}" />
+    </div>
+    <div class="pt-32">
+      <h2>{{ product.name }}</h2>
+      <p class="text-lg">$ {{ product.price }}</p>
+
+      {% if user.is_authenticated %} 
+
+        {% comment %} Replace with this  {% endcomment %}
+        {% include 'a_stripe/partials/cart-button.html' %}
+
+      
+
+      {% else %}
+      <a
+        href="{% url 'account_login' %}?next={{ request.path }}"
+        class="button !block !rounded-full !bg-black hover:!bg-neutral-500 active:scale-95 transition text-center !px-24"
+      >
+        Add to Cart
+      </a>
+      {% endif %}
+
+      <p class="pt-8 text-sm">{{ product.description }}</p>
+      <p class="text-sm hover:underline">
+        <a href="https://andreas-juds-store.creator-spring.com/" target="_blank"
+          >Store</a
+        >
+      </p>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

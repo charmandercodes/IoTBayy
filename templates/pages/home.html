@@ -1,0 +1,16 @@
+{% extends 'layouts/blank.html' %} {% block content %}
+
+<div class="flex justify-center items-start h-screen pt-24">
+  <div class="max-w-4xl mx-auto px-8 text-center">
+    {% if request.user.is_authenticated %}
+    <h1 class="text-4xl font-bold text-gray-800">Welcome to IoTBay, {{ request.user.username }}!</h1>
+    {% else %}
+    <h1>Welcome to IoTBay!</h1>
+    {% endif %}
+    <div class="mt-12">
+      <a href="{% url 'shop' %}" class="button">Shop</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

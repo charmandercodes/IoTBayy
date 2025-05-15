@@ -1,0 +1,20 @@
+{% extends 'layouts/blank.html' %}
+
+{% block content %}
+
+<div class="max-w-4xl mx-auto px-8 py-24 text-center">
+
+    {% if customer %}
+    <!-- Display customer information -->
+        <h1>Thanks for your order {{ customer.name }}!</h1>
+    {% else %}
+        <!-- Display a generic message -->
+        <p>Thank you!</p>
+    {% endif %}
+    <p class="my-10 text-gray-500">
+        The payment was successful
+    </p>
+    <a class="button" href="{% url 'home' %}">Back to Home</a>
+</div>
+
+{% endblock %}

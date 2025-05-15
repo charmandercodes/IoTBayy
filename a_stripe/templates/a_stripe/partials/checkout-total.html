@@ -1,0 +1,11 @@
+<div id="checkout_total" class="p-6">
+  <h2>Sub total</h2>
+  <p>Total: ${{ cart.get_total_cost|floatformat:2}}</p>
+  <a href="{% url 'checkout' %}" class="button">Proceed to Checkout</a>
+</div>
+
+<div class="hidden">
+  <div hx-swap-oob="true" id="product-total-{{product.id}}">
+    ${{ product.total_price|floatformat:2 }}
+  </div>
+</div>

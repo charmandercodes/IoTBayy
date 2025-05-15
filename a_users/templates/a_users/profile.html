@@ -1,0 +1,36 @@
+{% extends 'layouts/blank.html' %}
+{% block content %}
+
+<div class="max-w-lg mx-auto flex flex-col items-center pt-20 px-4">
+  <img class="w-36 h-36 rounded-full object-cover mb-4" src="{{ profile.avatar }}" />
+  <div class="text-center">
+    <h1>{{ profile.name }}</h1>
+    <div class="text-gray-400 mb-2 -mt-3">@{{ profile.user.username }}</div>
+    {% if profile.info %}
+    <div class="mt-8">{{ profile.info|linebreaksbr }}</div>
+    {% endif %}
+  </div>
+  <h1 class="mt-10">My Past Orders</h1>
+  <div class="w-full mt-6">
+    {% if past_orders %}
+      <ul class="space-y-4 w-full">
+        {% for order in past_orders %}
+          <li class="border p-4 rounded shadow-sm">
+            <div><strong>Order ID:</strong> {{ order.id }}</div>
+            <div><strong>Product:</strong> {{ order.product_name }}</div>
+            <div><strong>Price:</strong> ${{ order.price|floatformat:2 }}</div>
+            <div><strong>Quantity:</strong> {{ order.quantity }}</div>
+            <div><strong>Date</strong> {{order.created_at}} </div>
+            {% if order.product_image %}
+              <img src="{{ order.product_image }}" alt="{{ order.product_name }}" class="w-16 h-16 object-cover">
+            {% endif %}
+          </li>
+        {% endfor %}
+      </ul>
+    {% else %}
+      <p class="text-gray-500">No past orders found.</p>
+    {% endif %}
+  </div>
+</div>
+
+{% endblock %}
