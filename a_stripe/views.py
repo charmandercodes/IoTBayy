@@ -6,7 +6,7 @@ from django.conf import settings
 from django.views.decorators.http import require_POST
 from django.views.decorators.csrf import csrf_exempt
 from django.contrib.auth.decorators import login_required
-from a_stripe.models import CheckoutSession, UserPayment
+from a_stripe.models import CheckoutSession, PastOrder, UserPayment
 from django.http import HttpResponseRedirect
 stripe.api_key = settings.STRIPE_TEST_KEY
 from .utils import create_checkout_session, get_product_details
@@ -109,19 +109,51 @@ def checkout_view(request):
 
 def payment_successful(request):
     checkout_session_id = request.GET.get('session_id', None)
+    customer = None  # Default if session retrieval fails
 
     if checkout_session_id:
         session = stripe.checkout.Session.retrieve(checkout_session_id)
         customer_id = session.customer
         customer = stripe.Customer.retrieve(customer_id)
-    
-        if settings.CART_SESSION_ID in request.session:
-            del request.session[settings.CART_SESSION_ID]
 
+        # Fetch line items for the session
+        line_items = stripe.checkout.Session.list_line_items(session.id)
+
+        # Save Stripe Customer ID to user profile if authenticated
+        if request.user.is_authenticated:
+            profile = request.user.profile
+            if not profile.stripe_customer_id:
+                profile.stripe_customer_id = customer_id
+                profile.save()
+
+        # Mark checkout session as paid in dev mode (optional)
         if settings.DEBUG:
             checkout = CheckoutSession.objects.get(checkout_id=checkout_session_id)
             checkout.has_paid = True
             checkout.save()
+        # Save each line item to the PastOrder model
+        for line_item in line_items.data:
+            product_name = line_item.description  # Product name
+            price = line_item.amount_total / 100.0  # Stripe amount is in cents
+            currency = session.currency  # Currency from the session
+            quantity = line_item.quantity  # Product quantity
+            product_image = line_item.image if 'image' in line_item else None  # Product image URL if available
+
+            # Create PastOrder instance for each product in the checkout session
+            PastOrder.objects.create(
+                user=request.user,
+                stripe_checkout_id=session.id,
+                stripe_product_id=line_item.price.product,
+                product_name=product_name,
+                price=price,
+                currency=currency,
+                quantity=quantity,
+                product_image=product_image,
+            )
+
+        # Clear cart session after successful payment
+        if settings.CART_SESSION_ID in request.session:
+            del request.session[settings.CART_SESSION_ID]
 
     return render(request, 'a_stripe/payment_successful.html', {'customer': customer})
 

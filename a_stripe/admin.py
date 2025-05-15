@@ -5,3 +5,5 @@ from .models import *
 
 admin.site.register(ShippingInfo)
 admin.site.register(CheckoutSession)
+admin.site.register(UserPayment)
+admin.site.register(PastOrder)

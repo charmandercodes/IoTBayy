@@ -13,6 +13,7 @@ class Profile(models.Model):
     image = models.ImageField(upload_to='avatars/', blank=True)
     displayname = models.CharField(max_length=20, null=True, blank=True)
     info = models.TextField(null=True, blank=True)
+    stripe_customer_id = models.CharField(max_length=255, blank=True, null=True)
 
     def __str__(self):
         return str(self.user)

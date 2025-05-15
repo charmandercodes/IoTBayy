@@ -45,8 +45,11 @@ python manage.py createsuperuser
 ```python
 python manage.py runserver
 ```
+<<<<<<< HEAD
 You will get server error because of no keys
 
 in a_core/ create a .env file
 
 put environment variables in there
+=======
+>>>>>>> master
