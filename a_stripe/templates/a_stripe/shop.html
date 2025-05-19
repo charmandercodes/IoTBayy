@@ -4,13 +4,16 @@
 
 <div class="max-w-6xl mx-auto p-12">
     <h1>Shop</h1>
-    <input 
-    id="searchBox"
-    type="text"
-    placeholder="Search products..."
-    class="mt-4 mb-6 w-full p-3 border border-gray-300 rounded-lg"
-    />
-
+    <form method="get" action="">
+        <input 
+            id="searchBox"
+            name="q"
+            type="text"
+            placeholder="Search products..."
+            value="{{ request.GET.q }}"
+            class="mt-4 mb-6 w-full p-3 border border-gray-300 rounded-lg"
+        />
+    </form>    
     <div class="mx-auto py-2">
         <div class="flex items-center flex-wrap">
 

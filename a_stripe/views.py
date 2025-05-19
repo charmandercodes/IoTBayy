@@ -17,16 +17,23 @@ logger = logging.getLogger(__name__)
 
 # Create your views here.
 
+
 def shop_view(request):
+    query = request.GET.get('q', '').lower()
     products_list = stripe.Product.list()
     products = []
 
     for product in products_list['data']:
         if product.get('metadata', {}).get('category') == "shop":
-            products.append(get_product_details(product))
-
+            name = product.get('name', '').lower()
+            sku = product.get('metadata', {}).get('sku', '').lower()
             
+            # Only include product if it matches query or no query provided
+            if not query or query in name or query in sku:
+                products.append(get_product_details(product))
+
     return render(request, 'a_stripe/shop.html', {'products': products})
+
 
 def product_view(request, product_id):
 
