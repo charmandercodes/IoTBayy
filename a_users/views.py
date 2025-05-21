@@ -1,6 +1,5 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse
-
 from a_stripe.models import PastOrder, UserPayment
 from .forms import *
 from django.contrib.auth.decorators import login_required
@@ -10,15 +9,12 @@ from allauth.account.utils import send_email_confirmation
 from django.contrib.auth import logout
 import stripe
 from django.conf import settings
-
 stripe.api_key = settings.STRIPE_TEST_KEY
 
 # Create your views here.
 
-
-
-
 def profile_view(request, username=None):
+    # Resolve profile
     if username:
         profile = get_object_or_404(User, username=username).profile
     else:
@@ -27,16 +23,28 @@ def profile_view(request, username=None):
         except:
             return redirect('account_login')
 
-    # Query past payments associated with the user
-    past_orders = PastOrder.objects.filter(user=request.user).order_by('-created_at')
+    # Start with all past orders
+    past_orders = PastOrder.objects.filter(user=request.user)
+
+    # Optional: filter by order ID (search by number)
+    query = request.GET.get('q')
+    if query:
+        past_orders = past_orders.filter(id=query)
+
+    # Optional: filter by product name (case-insensitive)
+    product_filter = request.GET.get('product')
+    if product_filter:
+        past_orders = past_orders.filter(product_name__icontains=product_filter)
+
+    # Final ordering
+    past_orders = past_orders.order_by('-created_at')
 
     context = {
-        'profile': request.user.profile,
+        'profile': profile,
         'past_orders': past_orders,
     }
 
     return render(request, 'a_users/profile.html', context)
-
 
 @login_required
 def profile_edit_view(request):

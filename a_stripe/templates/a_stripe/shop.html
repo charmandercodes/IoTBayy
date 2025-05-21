@@ -4,10 +4,24 @@
 
 <div class="max-w-6xl mx-auto p-12">
     <h1>Shop</h1>
+<<<<<<< HEAD
+=======
+    <form method="get" action="">
+        <input 
+            id="searchBox"
+            name="q"
+            type="text"
+            placeholder="Search products..."
+            value="{{ request.GET.q }}"
+            class="mt-4 mb-6 w-full p-3 border border-gray-300 rounded-lg"
+        />
+    </form>    
+>>>>>>> ee68514 (fixed past order error)
     <div class="mx-auto py-2">
         <div class="flex items-center flex-wrap">
 
             {% for product in products %}
+<<<<<<< HEAD
                 <product-item class="block w-full md:w-1/3 xl:w-1/4 md:p-2">
                     <a href="{% url 'product' product.id %}" class="block aspect-square bg-gray-100 rounded-xl">
                         <img class="rounded-xl hover:shadow-lg" src="{{ product.image }}">
@@ -20,8 +34,50 @@
                     </p>
                 </product-item> 
             {% endfor %}
+=======
+                <div 
+                    class="product block w-full md:w-1/3 xl:w-1/4 md:p-2"
+                    data-name="{{ product.name|lower }}"
+                >
+                <a href="{% url 'product' product.id %}" class="block aspect-square bg-gray-100 rounded-xl">
+                    <img class="rounded-xl hover:shadow-lg" src="{{ product.image }}">
+                </a>
+                <div class="pt-3">
+                    {{ product.name }}             
+                </div>
+                <p class="pt-1 text-gray-400">
+                    {{ product.price|floatformat:2 }}
+                </p>
+            </div> 
+        {% endfor %}
+        
+>>>>>>> ee68514 (fixed past order error)
         </div>
     </div>
 </div>
 
+<<<<<<< HEAD
+=======
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        const searchBox = document.getElementById('searchBox');
+        const products = document.querySelectorAll('.product');
+
+        searchBox.addEventListener('input', function () {
+            const query = this.value.toLowerCase();
+
+            products.forEach(product => {
+                const name = product.getAttribute('data-name');
+                if (name.includes(query)) {
+                    product.style.display = '';
+                } else {
+                    product.style.display = 'none';
+                }
+            });
+        });
+    });
+</script>
+
+
+>>>>>>> ee68514 (fixed past order error)
 {% endblock %}

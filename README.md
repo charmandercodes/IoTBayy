@@ -45,3 +45,14 @@ python manage.py createsuperuser
 ```python
 python manage.py runserver
 ```
+<<<<<<< HEAD
+=======
+<<<<<<< HEAD
+You will get server error because of no keys
+
+in a_core/ create a .env file
+
+put environment variables in there
+=======
+>>>>>>> master
+>>>>>>> ee68514 (fixed past order error)
