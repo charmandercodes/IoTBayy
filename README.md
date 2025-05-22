@@ -3,7 +3,7 @@
 1. Git clone repository
 
 ```python
-git clone https://github.com/charmandercodes/IoTBayy.git . && rm -rf .git
+git clone --branch master https://github.com/charmandercodes/IoTBayy.git . && rm -rf .git
 ```
 
 1. Create virtual environment to keep environment isolated on machine
