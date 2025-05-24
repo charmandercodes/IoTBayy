@@ -51,5 +51,9 @@ You will get server error because of no keys
 in a_core/ create a .env file
 
 put environment variables in there
-=======
->>>>>>> master
+
+Note: if you do not have stripe env keys you will have to create an account for it to work
+
+STRIPE_TEST_KEY=
+ENVIRONMENT=
+SECRET_KEY=
